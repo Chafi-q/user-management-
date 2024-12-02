@@ -7,34 +7,20 @@ on:
 
 
 jobs:
-  build:
+
+  sonarqube:
     runs-on: self-hosted
-
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Install SonarQube scanner
-      uses: nosinovacao/sonarscanner-action@v1
+    - uses: actions/checkout@v4
       with:
-        version: '6.1.0.4477' # Specify the version if needed
-        javaDistribution: 'temurin' # Specify the Java distribution
-        javaVersion: '21' 
+        # Disabling shallow clones is recommended for improving the relevancy of reporting
+        fetch-depth: 0
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@<action version> # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN2 }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-    - name: Create sonar-project.properties file
-      run: |
-        touch sonar-project.properties
-        echo "sonar.projectKey=your-project-key" >> sonar-project.properties
-        echo "sonar.host.url=${{ secrets.SONAR_HOST_URL }}" >> sonar-project.properties
-        echo "sonar.login=${{ secrets.SONAR_TOKEN  }}" >> sonar-project.properties
-        # point this to your sources folder
-        # this is a Golang example
-        echo "sonar.sources=." >> sonar-project.properties  
-        echo "sonar.exclusions=**/*_test.go" >> sonar-project.properties
-        echo "sonar.tests=." >> sonar-project.properties
-        echo "sonar.test.inclusions=**/*_test.go" >> sonar-project.properties
-
-    - name: Run SonarQube Scanner 
-      run: sonar-scanner 
 
 
 

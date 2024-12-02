@@ -36,7 +36,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN2 }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=user-management-ci -Dsonar.projectName='user-management-ci'
+        run: mvn -B verify -X org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=user-management-ci -Dsonar.projectName='user-management-ci'
+
 
 
 

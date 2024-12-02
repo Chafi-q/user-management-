@@ -18,11 +18,21 @@ jobs:
   run-sonarqube:
     runs-on: self-host
     steps:
-    - name: SonarQube Scan
-      uses: monstar-lab-oss/sonarqube-github-action@v1.0.1
-      with:
-        url: ${{ secrets.SONAR_HOST_URL}}
-        token: ${{secrets.SONAR_TOKEN  }}
+    - name: Create sonar-project.properties file
+      run: |
+        touch sonar-project.properties
+        echo "sonar.projectKey=your-project-key" >> sonar-project.properties
+        echo "sonar.host.url=${{ secrets.SONAR_HOST_URL }}" >> sonar-project.properties
+        echo "sonar.login=${{ secrets.SONAR_TOKEN  }}" >> sonar-project.properties
+        # point this to your sources folder
+        # this is a Golang example
+        echo "sonar.sources=." >> sonar-project.properties  
+        echo "sonar.exclusions=**/*_test.go" >> sonar-project.properties
+        echo "sonar.tests=." >> sonar-project.properties
+        echo "sonar.test.inclusions=**/*_test.go" >> sonar-project.properties
+
+    - name: Run SonarQube Scanner 
+      run: sonar-scanner 
 
 
 
